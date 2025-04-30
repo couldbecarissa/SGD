@@ -75,5 +75,5 @@ def metric_scores(df,type='micro'):
 
 # Display the generated confusion matrix
 print(df_confusion)
-print(metric_scores(df_confusion,type='macro'))
+print(metric_scores(df_confusion,type='micro'))
 

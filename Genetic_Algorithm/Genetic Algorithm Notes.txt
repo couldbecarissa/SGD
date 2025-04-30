@@ -1,0 +1,128 @@
+﻿10:29 30/04/2025
+import numpy as np 
+
+
+Elements of Genetic Algorithms that are key:
+-Populations of Chromosomes
+-Selection  according to fitness(Fitness determines how well a chromosome solves the problem at hand)
+-Crossover to produce new offspring
+-Random mutation of new offspring
+
+
+NB: The population typically takes the form of bit strings with values of 0 and 1(binary)
+
+
+There are 3 main functions/Operators required:
+1.Selection:
+        This operator selects chromosomes in the population for reproduction. High fitness=More likelihood to be chosen for reproduction. 
+
+
+Selection techniques to make it more effective:
+1. Tournament Selection
+It mimics a competition in nature.
+Steps:
+1. Choose a tournament size,k of between 2 to 7 individuals depending on the population size.(large k=stronger individuals are more likely to be selected)
+2. Randomly select “k” individuals from the population.
+3. The individual with the highest fitness within this small group wins the tournament
+4. The winner is selected for reproduction
+5. Repeat until enough parents are chosen.
+
+
+2. Roulette Wheel Selection
+Taught in class.Re:Lecture Notes AIEN 102.It gives each individual a chance of being selected proportional to its fitness.
+Steps:
+1. Find np.sum(fitness values)
+2. Find probability of each value 
+probability=[for i in fitness_values:return i/np.sum(fitness values)]
+3. Find cumulative probability
+cum_prob=[np.cumsum(probability)]
+4. Generate random numbers,p  and select individuals whose value lands within the range,p.
+p=np.random.random()->in the range [0,1]
+
+
+3. Rank Based Selection
+Provides relative ranking of individuals based on their fitness values.
+Steps:
+1. Sort all individuals by their fitness.
+2. Assign ranks with 1 being the worst and N being the highest.
+3. Select individuals based on these rank probabilities(apply roulette wheel selection from here)
+
+
+2.Crossover:
+        Randomly chooses a locus and exchanges sub-sequences  before and after it between two chromosomes to produce an offspring.
+The offspring is allowed to take some characteristics from both parents.
+
+
+Types of Crossover:
+1. Single Point Crossover
+Steps:
+1. Create a random crossover point along the length of the chromosome
+k=np.random.randint(1,len(chromosomes))
+2. Exchange all genes beyond that point between parents
+3. Create 2 offspring with genetic material from both parents.
+
+
+2. Two Point Crossover
+Works the same as single point crossover but we have two crossover points.
+3. Uniform Crossover
+Each Gene here is considered separately.
+Steps:
+1. Generate a random “mask” of 0s and 1s having the same length as the chromosomes.
+mask=[ for _ in len(chromosomes):np.random.randint(0,1) ]
+2. At each position;if the mask bit is 0,Offspring 1 inherits from parent 1 and Offspring 2 from Parent 2.
+If the mask bit is 1,Offspring 1 inherits from parent 2 and Offspring 2 from Parent 1.
+4. Arithmetic Crossover
+        This can be used with real valued chromosomes.Each offspring has a value which is the average of the parent values.
+
+
+3.Mutation
+This process adds diversity to the given population by making small,random changes to the chromosomes.It prevents algorithms from getting stuck in the local gene pool and allows it to explore the search space more effectively.
+It employs the use of a value known as mutation probability,pm.
+Types of Mutation Operators:
+1. Binary Mutation
+Used for Binary encoded Chromosomes.
+Steps:
+1. Examone each bit in the chromosome
+2. For each bit position,generate a random number between 0 and 1.
+for _ in chromosome: flip=np.random.rand()
+                        flipper=[]
+flipper.append(flip)
+3. If the flip is less than mutation probability,flip the bit.
+
+
+
+
+The following are used where real values are involved.
+
+
+2. Uniform Mutation
+Same as binary mutation except you employ a mutation range,mutation_range=np.random.randint(0,10) to replace any values that need to be flipped.
+Instead of flipping,we replace.
+
+
+3. Swap Mutation
+Randomly select 2 positions and swap their values.
+
+
+4. Insert Mutation
+Randomly select 2 positions,remove the bit at one of the positions and insert it at the other.
+
+
+5. Invert Mutation
+Reverse the order of a given sublist within the sequence
+
+
+6. Scramble Mutation
+Randomly shuffles a subset of the chromosome
+
+
+
+
+General Pseudocode:
+Initialization: Create an initial population of random solutions
+Evaluation: Calculate fitness for each individual
+Selection: Choose individuals for reproduction based on fitness
+Crossover: Combine genetic material from parents to create offspring
+Mutation: Introduce small random changes in offspring (this is where our focus is)
+Replacement: Form a new population from offspring and possibly some parents
+Repeat steps 2-6 until termination criteria are met
